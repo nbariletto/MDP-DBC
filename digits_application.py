@@ -58,7 +58,7 @@ import gc
 try:
     from cbi_partitions import PartitionKDE
 except ImportError:
-    print("Warning: cbi_partitions library not found. Please install it via pip to run the CBI section.")
+    print("Warning: cbi_partitions library not found. Please install it via `pip install https://github.com/nbariletto/cbi_partitions/archive/main.zip' to run the CBI section.")
     PartitionKDE = None
 
 # ==========================================
@@ -83,7 +83,7 @@ torch.cuda.manual_seed(SEED)
 torch.cuda.manual_seed_all(SEED)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-torch.use_deterministic_algorithms(True) # Force exact reproducibility
+torch.use_deterministic_algorithms(True)
 
 # ==========================================
 # 1. DATA LOADING
@@ -98,7 +98,7 @@ def load_data():
     mask = np.isin(targets, DIGIT_PAIR)
     indices_subset = np.where(mask)[0]
     
-    # --- Training set: first 5000 (same as original) ---
+    # --- Training set: first 5000 ---
     train_indices = indices_subset[:5000]
     
     X_list = []
@@ -268,7 +268,7 @@ if __name__ == '__main__':
         X_jax, targets, X_plot, X_oos, T_oos = load_data()
         print(f"Total training samples: {len(X_plot)}")
 
-        # --- 2. Train PyTorch Autoencoder (on training data only, identical to original) ---
+        # --- 2. Train PyTorch Autoencoder (on training data only) ---
         print("\n=== STAGE: TRAINING PYTORCH AE (MSE) ===")
         device_pt = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         ae_pt = AutoencoderPT(latent_dim=LATENT_DIM).to(device_pt)
@@ -367,7 +367,7 @@ if __name__ == '__main__':
         print(f"Combined latent shape: {Z_combined_np.shape}  "
               f"(train 0:{N_train}, OOS {N_train}:{N_train+N_oos})")
 
-        # --- 3. Train Flow (on training data, identical to original) ---
+        # --- 3. Train Flow (on training data) ---
         print("\n=== STAGE: TRAINING MAF FLOW ===")
         # Re-initialize JAX random key safely
         rng, key = jax.random.split(jax.random.PRNGKey(SEED)) 
@@ -449,7 +449,7 @@ if __name__ == '__main__':
         plt.savefig(f"{SAVE_DIR}/pretrained_clustering_oos.pdf")
         plt.close()
 
-        # --- 5. RESAMPLING (on training data, identical to original) ---
+        # --- 5. RESAMPLING ---
         print("\n=== STAGE: RESAMPLING (JAX Parallel) ===")
         NUM_RESAMPLES = 500 
         NUM_UPDATES = 3000
@@ -605,7 +605,7 @@ if __name__ == '__main__':
         plt.close()
         
         # =========================================================
-        # --- NEW COMBINED FINAL PLOT (For Paper) ---
+        # --- COMBINED PLOT (in the paper) ---
         # =========================================================
         print("Generating final combined composite plot for paper...")
         
@@ -644,7 +644,6 @@ if __name__ == '__main__':
         axs_combined[0].grid(axis='y', alpha=0.3)
         
         # 2. Co-clustering matrix
-        # aspect='auto' combined with set_box_aspect(1) creates a perfect, undeformed square
         im = axs_combined[1].imshow(co_matrix, cmap='cividis', vmin=0, vmax=1, aspect='auto')
         axs_combined[1].axhline(500, color='white', linewidth=4, alpha=1)
         axs_combined[1].axvline(500, color='white', linewidth=4, alpha=1)
@@ -655,7 +654,6 @@ if __name__ == '__main__':
         axs_combined[1].set_xlabel('Digit Class')
         axs_combined[1].set_ylabel('Digit Class')
         
-        # Attach colorbar strictly to the outside of the matrix axes to prevent it from shrinking the square
         cax = axs_combined[1].inset_axes([1.05, 0.0, 0.05, 1.0])
         cb = fig_combined.colorbar(im, cax=cax)
         cb.set_label('Co-Clustering Probability', labelpad=15)
@@ -668,7 +666,6 @@ if __name__ == '__main__':
             row, col = divmod(i, 2)
             composite_img[row*img_h:(row+1)*img_h, col*img_w:(col+1)*img_w] = X_combined_plot[idx].squeeze()
             
-        # Composite image is 56x56, box is square, so aspect='auto' renders as perfectly square
         axs_combined[2].imshow(composite_img, cmap='gray', aspect='auto')
         axs_combined[2].axis('off')
         # Add internal white crossbars to visually separate the 4 sub-images
@@ -678,7 +675,6 @@ if __name__ == '__main__':
         plt.savefig(f"{SAVE_DIR}/final_combined_plot_oos.pdf", bbox_inches='tight')
         plt.close(fig_combined)
         
-        # Restore old plot params
         plt.rcParams.update(old_params)
 
         # --- SAVE CHECKPOINTS FOR STAGE 2 ---
