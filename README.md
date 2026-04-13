@@ -1,4 +1,4 @@
-These scripts reproduce the numerical experiments presented in the paper "Scalable Posterior Uncertainty for Flexible Density-Based Clustering".
+These Python scripts reproduce the numerical experiments presented in the paper "Scalable Posterior Uncertainty for Flexible Density-Based Clustering".
 
 The ``digits_application``, ``mixture_illustration`` and ``circles_illustration`` scripts are fully self-contained.
 
