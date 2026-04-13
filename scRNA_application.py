@@ -42,9 +42,6 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import gudhi.clustering.tomato as tomato
 
-# ---- CBI ----
-from cbi_partitions import PartitionKDE
-
 # ==========================================
 # CONFIGURATION
 # ==========================================
