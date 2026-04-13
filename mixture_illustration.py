@@ -200,7 +200,8 @@ def level_set_cluster_1d_all(grid, log_density, threshold):
     """
     Like level_set_cluster_1d but assigns every point to the nearest
     cluster (no noise label). Points below threshold snap to the
-    closest cluster by Euclidean distance on the grid.
+    closest cluster by Euclidean distance on the grid. Not shown in
+    paper, left here for illustration.
 
     Args:
         grid: 1-d sorted array of evaluation points.
@@ -485,8 +486,8 @@ def main():
         current_ticks = ax.get_yticks()
         ax.set_yticks([t for t in current_ticks if t >= 0])
 
-    # --- Helper: appendix figure (cluster_all, 2 columns, no data on left) ---
-    def _make_figure_appendix(true_lbls, baseline_lbls, resampled_lbls, outpath):
+    # --- Helper: cluster-whole-sample figure (cluster_all, 2 columns, no data on left) ---
+    def _make_figure_wholecluster(true_lbls, baseline_lbls, resampled_lbls, outpath):
         fig, axes = plt.subplots(
             2, 2, figsize=(10, 4.5),
             gridspec_kw={
@@ -668,9 +669,9 @@ def main():
     )
 
     # ==========================================================================
-    # Plot 2: every point assigned to closest cluster (appendix)
+    # Plot 2: every point assigned to closest cluster (not shown in paper)
     # ==========================================================================
-    _make_figure_appendix(
+    _make_figure_wholecluster(
         true_labels_all, baseline_labels_all, resampled_labels_all,
         os.path.join(outdir, "martingale_clustering_1d_all.pdf"),
     )
