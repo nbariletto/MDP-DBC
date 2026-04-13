@@ -469,7 +469,7 @@ def main():
     plt.close()
 
     # ==================================================================
-    # NEW FIGURE 1: Raw data | Trained density | Resampled density 1 | Resampled density 2
+    # FIGURE 1: Raw data | Trained density | Resampled density 1 | Resampled density 2
     # ==================================================================
     _fs_title = 13
     _fs_tick = 10
@@ -528,7 +528,7 @@ def main():
     plt.close(fig_new1)
 
     # ==================================================================
-    # NEW FIGURE 2: Trained clustering | Resampled clust. 1 | Resampled clust. 2 | Certainty
+    # FIGURE: Trained clustering | Resampled clust. 1 | Resampled clust. 2 | Certainty
     # ==================================================================
     fig_new2, axes_new2 = plt.subplots(
         1, 4, figsize=(14, 3.5), constrained_layout=True,
