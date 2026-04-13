@@ -3,7 +3,6 @@ import sys
 
 # ==========================================
 # 0. REPRODUCIBILITY ENVIRONMENT SETUP
-# (Must happen before ANY library imports)
 # ==========================================
 SEED = 2026
 
